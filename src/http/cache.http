@@ -1,0 +1,36 @@
+# baseURL
+@baseURL = http://localhost:3000
+
+###
+# Get Cache By Key
+GET {{baseURL}}/cache/:key
+
+###
+# Create Cache Entry
+POST {{baseURL}}/cache
+Content-Type: application/json
+
+{
+  "key": "exampleKey",
+  "value": "exampleValue",
+  "ttl": 60000
+}
+
+###
+# Get TTL By Key
+GET {{baseURL}}/cache/exampleKey/ttl
+
+
+###
+# Update Expiration Time for Cache Entry
+PATCH {{baseURL}}/cache/exampleKey/expire
+Content-Type: application/json
+
+{
+  "expireIn": 120000
+}
+
+###
+# Delete Cache By Key
+DELETE {{baseURL}}/cache/exampleKey
+

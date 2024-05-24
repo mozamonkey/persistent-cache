@@ -1,0 +1,149 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: Cache API
+  description: API documentation for the cache service
+
+tags:
+  - name: cache
+    description: Cache operations
+
+paths:
+  /cache/{key}:
+    get:
+      tags:
+        - cache
+      summary: Get Cache By Key
+      parameters:
+        - name: key
+          in: path
+          description: The key of the cache entry
+          required: true
+          type: string
+      responses:
+        200:
+          description: 'OK'
+          schema:
+            type: string
+            description: Cache value
+        404:
+          description: 'Cache not found'
+        500:
+          description: 'Server error'
+    delete:
+      tags:
+        - cache
+      summary: Delete Cache By Key
+      parameters:
+        - name: key
+          in: path
+          description: The key of the cache entry
+          required: true
+          type: string
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Invalid key'
+        500:
+          description: 'Server error'
+
+  /cache:
+    post:
+      tags:
+        - cache
+      summary: Create Cache Entry
+      parameters:
+        - name: body
+          in: body
+          description: Cache data
+          required: true
+          schema:
+            $ref: '#/definitions/CreateCacheDto'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad request'
+        500:
+          description: 'Server error'
+
+  /cache/{key}/ttl:
+    get:
+      tags:
+        - cache
+      summary: Get TTL By Key
+      parameters:
+        - name: key
+          in: path
+          description: The key of the cache entry
+          required: true
+          type: string
+      responses:
+        200:
+          description: 'OK'
+          schema:
+            type: integer
+        400:
+          description: 'Invalid key'
+        404:
+          description: 'Cache not found'
+        500:
+          description: 'Server error'
+
+  /cache/{key}/expire:
+    patch:
+      tags:
+        - cache
+      summary: Update Expiration Time for Cache Entry
+      parameters:
+        - name: key
+          in: path
+          description: The key of the cache entry
+          required: true
+          type: string
+        - name: body
+          in: body
+          description: New TTL value
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateExpireDto'
+      responses:
+        200:
+          description: 'Updated'
+        400:
+          description: 'Invalid key'
+        404:
+          description: 'Cache not found'
+        500:
+          description: 'Server error'
+
+definitions:
+  CreateCacheDto:
+    type: object
+    required:
+      - key
+      - value
+    properties:
+      key:
+        type: string
+        description: Cache key
+      value:
+        type: string
+        description: Cache value
+      ttl:
+        type: integer
+        description: Time to live in milliseconds
+
+  UpdateExpireDto:
+    type: object
+    required:
+      - ttl
+    properties:
+      ttl:
+        type: integer
+        description: New time to live in milliseconds
+
+schemes:
+  - http
+  - https
